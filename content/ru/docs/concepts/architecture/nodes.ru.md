@@ -32,6 +32,6 @@ Each section is described in detail below.
 ### Адреса {#addresses}
 ### Состояния {#condition}
 ### Доступная емкость {#capacity}
-### Информация
+### Информация {# info}
 
 {{% /capture %}}
