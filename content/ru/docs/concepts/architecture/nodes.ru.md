@@ -86,31 +86,20 @@ Addresses:
 
 ### Capacity и Allocatable {#capacity}
 
-Describes the resources available on the node: CPU, memory and the maximum
-number of pods that can be scheduled onto the node.
+Раздел `Capacity` и `Allocatable` содержит информацию о доступных ресурсах, таких как CPU, память и максимальное количество подов которые могут быть запущены на узле.
 
-The fields in the capacity block indicate the total amount of resources that a
-Node has. The allocatable block indicates the amount of resources on a
-Node that is available to be consumed by normal Pods.
+`Capacity` - общее количество ресурсов доступных на узле. А `Allocatable` - количество ресурсов на узле, доступных для использования подами.
 
-You may read more about capacity and allocatable resources while learning how
-to [reserve compute resources](/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable)
-on a Node.
+Более подробно познакомится с `Capacity` и `Allocatable` можно в процессе изучения раздела ["Резервирование вычеслительных ресурсов"](/docs/tasks/administer-cluster/reserve-compute-resources/#node-allocatable).
 
 ### System Info {#info}
 
-Describes general information about the node, such as kernel version, Kubernetes version (kubelet and kube-proxy version), Docker version (if used), and OS name.
-This information is gathered by Kubelet from the node.
+В данном разделе находится общая информация об узле, такая как версия ядра, версия Kubernetes, версия Docker и наименование ОС.
 
-## Management
+## Управление
 
-Unlike [pods](/docs/concepts/workloads/pods/pod/) and [services](/docs/concepts/services-networking/service/),
-a node is not inherently created by Kubernetes: it is created externally by cloud
-providers like Google Compute Engine, or it exists in your pool of physical or virtual
-machines. So when Kubernetes creates a node, it creates
-an object that represents the node. After creation, Kubernetes
-checks whether the node is valid or not. For example, if you try to create
-a node from the following content:
+В отличии от [подов](/docs/concepts/workloads/pods/pod/) и [сервисов](/docs/concepts/services-networking/service/), узел не создается непосредственно самим Kubernetes, он создается извне облачными провайдерами, такими как Google Compute Engine, или уже находится в вашем пуле физических или виртуальных машин. Поэтому, когда Kubernetes создает узел, он создает объект представляющий собой узел. После создания, Kubernetes проверяет, является ли узел действительным или нет.
+К примеру, если вы попробуете создать узел из следующей конфигурации
 
 ```json
 {
@@ -124,21 +113,14 @@ a node from the following content:
   }
 }
 ```
-
-Kubernetes creates a node object internally (the representation), and
-validates the node by health checking based on the `metadata.name` field. If the node is valid -- that is, if all necessary
-services are running -- it is eligible to run a pod. Otherwise, it is
-ignored for any cluster activity until it becomes valid.
-The name of a Node object must be a valid
-[DNS subdomain name](/docs/concepts/overview/working-with-objects/names#dns-subdomain-names).
+Kubernetes создаст объект узла (его представление) внутри, и на основе поля `metadata.name` проверит узел на его роботоспособность. Если узел работоспособен - то есть, все необходимые сервисы запущены - то можно запускать поды. Иначе, узел игнорируется для любых действий кластера пока не станет работоспособным.
+Имя объекта узла должно быть корректным в сооствествии с [DNS subdomain name](/docs/concepts/overview/working-with-objects/names#dns-subdomain-names).
 
 {{< note >}}
-Kubernetes keeps the object for the invalid node and keeps checking to see whether it becomes valid.
-You must explicitly delete the Node object to stop this process.
+Kubernetes постоянно проверяет не рабочий объект узла, не заработал ли он. Что бы остановить этот процесс, вам необходимо удалить его в ручную.
 {{< /note >}}
 
-Currently, there are three components that interact with the Kubernetes node
-interface: node controller, kubelet, and kubectl.
+В настоящее время, есть три компонента которые взаимодействуют с интерфейсом узла Kubernetes: node controller, kubelet, и kubectl.
 
 ### Node Controller {#node_controller}
 
